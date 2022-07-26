@@ -76,27 +76,3 @@ new_x = df[feature_names].values
 new_y = df['survived'].values
 modelThree = DecisionTreeClassifier()
 modelThree.fit(new_x, new_y)
-
-#creating an image to visualize the decision tree
-from sklearn.tree import export_graphviz
-import graphviz
-from IPython.display import Image
-dot_file = export_graphviz(modelThree, feature_names = feature_names)
-graph = graphviz.Source(dot_file)
-graph.render(filename = 'modelThreeTree', format = 'png', cleanup = 'True')
-
-#conducting pre-pruning on the decision tree to prevent it from overfitting
-pruned_decision_tree = DecisionTreeClassifier(max_depth = 3, min_samples_leaf = 2, max_leaf_nodes = 10)
-pruned_decision_tree.fit(new_x, new_y)
-
-#looping through values on the decision tree using grid search
-from sklearn.model_selection import GridSearchCV
-param_grid = {
-              'max-depth': depth,
-              'min_samples_leaf': leaves,
-              'max_leaf_nodes': [10, 20, 35, 50]}
-modelFour = DecisionTreeClassifier()
-gs = GridSearchCV(modelFour, param_grid, scoring = 'f1', cv = 5)
-gs.fit(new_x, new_y)
-print("best params: ", gs.best_params_)
-print("best score: ", gs.best_score_)
